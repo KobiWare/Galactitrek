@@ -1,0 +1,57 @@
+{
+	"ships": [
+		{
+			"name": "Odyssey of the Stars",
+			"price": 220
+		},
+		{
+			"name": "Voyage of the Stars",
+			"price": 80
+		},
+		{
+			"name": "Personal ship",
+			"price": 2400
+		}
+	],
+	"destinations": [
+		{
+			"name": "Mars",
+			"price": 25,
+			"days": 3
+		},
+		{
+			"name": "Venus",
+			"price": 25,
+			"days": 3
+		},
+		{
+			"name": "Alpha/Proxima Centauri system",
+			"price": 125,
+			"days": 7
+		},
+		{
+			"name": "Trappist system",
+			"price": 150,
+			"days": 14
+		},
+		{
+			"name": "Sagittarius A",
+			"price": 250,
+			"days": 30
+		}
+	],
+	"rooms": [
+		{
+			"name": "Executive Suite",
+			"price": 1500
+		},
+		{
+			"name": "Govenors Suite",
+			"price": 500
+		},
+		{
+			"name": "Cozy Suite",
+			"price": 45
+		}
+	]
+}
