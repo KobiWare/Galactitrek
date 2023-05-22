@@ -1,0 +1,150 @@
+<body style="padding: 0; margin: 0;">
+	<canvas id="body3" width="700px" height="700px" style="background-color: rgba(0, 0, 0, 0.5); padding: 0; margin: 0; "></canvas>
+</body>
+<script>
+	function particle() {
+		var stars = []
+		var shipNames = ["Odyssey of the Stars", "Voyage of the Stars", "The Icon ship", "The Oasis", "The Galactic", "Voyager III", "Utopia of the stars"]
+		class pos {
+			constructor(x, y, bright) {
+				this.x = canvas.width / 2;
+				this.y = Math.random() * canvas.height;
+				this.vx = mouseXspeed + (Math.random() - 0.5) * (canvas.width / 70);
+				this.vy = mouseYspeed + (Math.random() - 0.5) * (canvas.height / 200);
+				this.text = shipNames.pop()
+				if(bright) {
+					this.color = "hsla(" + "0, 0%, " + "100" + "%," + 100 + "%)"
+				} else {
+					this.color = "hsla(" + (Math.random() * 255) + ", 40%, 50%," + 80 + "%)"
+				}
+				stars.push(this)
+			}
+			applyBody(timeStep) {
+				this.x -= this.vx * timeStep;
+				this.y -= this.vy * timeStep;
+			}
+			physics(timeStep) {
+				// Normalized X and Y, also distance
+				
+				var dX = this.x - canvas.width / 2
+				var dY = this.y - canvas.height / 2
+				var dist = Math.sqrt((dX * dX) + (dY * dY))
+				
+				if(dist < canvas.width / 16) {
+					return true
+				}
+				
+				this.vx += dX / dist * gravityStrength;
+				this.vy += dY / dist * gravityStrength;
+				this.applyBody(timeStep);
+				return false;
+			}
+			
+		}
+		class body {
+			constructor(x, y, gravity) {
+			
+			}
+		}
+		var canvas = document.getElementById("body3");
+		var ctx = canvas.getContext("2d");
+		
+		//var gravity = 0.3;
+		var gravityStrength = 0.08
+		var mouseX2 = 50;
+		var mouseY2 = 50;
+		var planetBodies = []
+		
+		var mouseXspeed = 0;
+		var mouseYspeed = 0;
+		
+		var mouseDown = false;
+		
+		var camX = 0;
+		var camY = 0;
+		var camZ = 0;
+		var trueMouseClick = false
+		
+		function getRandomStars(numNewStars, bright) {
+			for(var i = 0; i < numNewStars; i++) {
+				var newStarAdded = new pos(mouseX2, mouseY2, bright);
+			}
+		}
+		
+		//
+		function project2D(dot) {
+			ctx.fillStyle = dot.color;
+			ctx.fillRect(dot.x, dot.y, 5, 5);
+			
+			ctx.font = "12px serif";
+			ctx.fillText(dot.text, dot.x, dot.y - 8);
+			
+			
+			if(dot.x > canvas.width || dot.x < 0) {
+				return true;
+			}
+			if(dot.y > canvas.height || dot.y < 0) {
+				return true;
+			}
+			return false;
+		}
+		
+		function drawBG(){
+			/*
+			if(trueMouseClick) {
+				getRandomStars(5, true)
+				trueMouseClick = false
+			}
+			if(mouseDown) {
+				getRandomStars(1, true)
+			}
+			*/
+			
+			canvas.width = window.innerWidth - 10;
+			canvas.height = window.innerHeight - 10;
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			for(var i = 0; i < stars.length; i++) {
+				var outOfView = project2D(stars[i])
+				var colliding = stars[i].physics(0.6);
+				if(outOfView || colliding) {
+					stars.splice(i, 1);
+					i--;
+				}
+			}
+			
+			// Only supports one body
+			ctx.fillStyle = "#0000FF";
+			ctx.beginPath();
+			ctx.arc(canvas.width / 2, canvas.height / 2,  canvas.width / 32, 0, 2 * Math.PI);
+			ctx.fill();
+			
+			ctx.font = "12px serif";
+			ctx.fillStyle = "#FFFF00";
+			ctx.fillText("LIVE: " + new Date(), 10, 10);
+			
+			
+			setTimeout(drawBG, 20);
+			camY = 0;
+		}
+		
+		onmousemove = function(e){
+			mouseXspeed = 0 - (e.clientX - mouseX2) / 2;
+			mouseYspeed = 0 - (e.clientY - mouseY2) / 2;
+			mouseX2 = e.clientX;
+			mouseY2 = e.clientY;
+		}
+		
+		document.body.onmousedown = function() { 
+			trueMouseClick = true
+			mouseDown = true;
+		}
+		document.body.onmouseup = function() {
+			mouseDown = false;
+		}
+		drawBG();
+		getRandomStars(7, true)
+	}
+	
+	// Disabled
+	particle()
+</script>
